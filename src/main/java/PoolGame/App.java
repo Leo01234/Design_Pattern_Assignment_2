@@ -49,23 +49,34 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        // Initialize game first, to get table size
+        ConfigReader config = loadConfig(getParameters().getRaw());
+        Game game = new Game(config);
+
         Group root = new Group();
-        Scene scene = new Scene(root);
+        // Set size of the scene
+        Scene scene = new Scene(root, game.getWindowDimX(), game.getWindowDimY());
         
         stage.setScene(scene);
         stage.setTitle("PoolGame");
         stage.show();
 
-        ConfigReader config = loadConfig(getParameters().getRaw());
-        Game game = new Game(config);
-
         Canvas canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
 
-        stage.setWidth(game.getWindowDimX());
-        stage.setHeight(game.getWindowDimY() +
-                        Pocket.RADIUS +
-                        PoolTable.POCKET_OFFSET +
-                        4); // Magic number to get bottom to align
+        /*
+         * I can't understand the usage of magic number 4 here.
+         * Maybe we should use the size of scene instead of stage.
+         * It seems that the size of stage includes decorations.
+         * https://stackoverflow.com/questions/40095830/why-is-my-javafx-window-not-the-right-width
+         */
+        // stage.setWidth(game.getWindowDimX());
+        // stage.setHeight(game.getWindowDimY() +
+        //                 Pocket.RADIUS +
+        //                 PoolTable.POCKET_OFFSET +
+        //                 4); // Magic number to get bottom to align
+        stage.setResizable(false);
+        // Set the size of stage using the size of scene
+        stage.sizeToScene();
 
         root.getChildren().add(canvas);
         // GraphicsContext gc = canvas.getGraphicsContext2D();
