@@ -343,6 +343,7 @@ public class Ball implements Drawable, Movable {
 
                     this.cueStick.setXPos(actionEvent.getSceneX());
                     this.cueStick.setYPos(actionEvent.getSceneY());
+                    this.cueStick.setRotate(this.shape.getCenterX(),this.shape.getCenterY());
                 }
             }
         );

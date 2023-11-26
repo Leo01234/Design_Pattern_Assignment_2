@@ -2,10 +2,13 @@ package PoolGame.Items;
 
 import PoolGame.Drawable;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
+
+import java.awt.*;
 
 /**
  * The cue stick image
@@ -35,17 +38,51 @@ public class CueStick implements Drawable {
         this.iv.getTransforms().add(this.rotate);
     }
 
-    /** X position of upper-left corner */
+    /**
+     * X position of upper-left corner
+     * set Rotate pivot too
+     */
     public void setXPos(double xPos) {
         this.iv.setX(xPos);
+        this.rotate.setPivotX(xPos);
     }
 
-    /** Y position of upper-left corner */
+    /**
+     * Y position of upper-left corner
+     * set Rotate pivot too
+     */
     public void setYPos(double yPos) {
         this.iv.setY(yPos);
+        this.rotate.setPivotY(yPos);
     }
 
-    /** do not show the stick */
+    /**
+     * Computes the angle (in degrees) of the vector . The angle
+     * will be in the range 0 (inclusive) to 360 (exclusive) as measured
+     * counterclockwise from the positive x-axis.
+     */
+    private double computeAngleOfVector(Point2D vector) {
+        double angle = vector.angle(1.0, 0.0);
+        if (vector.getY() > 0) {
+            // vector pointing downwards and thus is in the 3rd or 4th quadrant
+            return 360.0 - angle;
+        }
+        // vector pointing upwards and thus is in the 1st or 2nd quadrant
+        return angle;
+    }
+
+    /** Rotate to align with mouse */
+    public void setRotate(double ballXPos, double ballYPos) {
+        double imageWidth = this.iv.getBoundsInLocal().getWidth();
+        double imageHeight = this.iv.getBoundsInLocal().getHeight();
+        Point2D imageVector = new Point2D(imageWidth,imageHeight);
+
+        Point2D mouseBallVector = new Point2D(this.iv.getX()-ballXPos,this.iv.getY()-ballYPos);
+
+        this.rotate.setAngle(computeAngleOfVector(imageVector)-computeAngleOfVector(mouseBallVector));
+    }
+
+    /** hide the stick */
     public void disable() {
         this.iv.setVisible(false);
     }
