@@ -32,7 +32,7 @@ public class CueStick implements Drawable {
         this.iv.setPreserveRatio(true);
         this.iv.setSmooth(true);
         this.iv.setCache(true);
-//        this.iv.setVisible(false);
+        this.iv.setVisible(false);
 
         this.rotate = new Rotate();
         this.iv.getTransforms().add(this.rotate);

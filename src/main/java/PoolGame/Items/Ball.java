@@ -341,6 +341,8 @@ public class Ball implements Drawable, Movable {
                     this.mouseDragLine.setEndX(actionEvent.getSceneX());
                     this.mouseDragLine.setEndY(actionEvent.getSceneY());
 
+                    // cueStick
+                    this.cueStick.enable();
                     this.cueStick.setXPos(actionEvent.getSceneX());
                     this.cueStick.setYPos(actionEvent.getSceneY());
                     this.cueStick.setRotate(this.shape.getCenterX(),this.shape.getCenterY());
@@ -351,6 +353,10 @@ public class Ball implements Drawable, Movable {
             (actionEvent) -> {
                 if (this.hasStopped()) {
                     this.mouseDragLine.setVisible(false);
+
+                    // cueStick
+                    this.cueStick.disable();
+
                     Point2D vec = calculateCueBallVelOnHit(actionEvent.getSceneX(), actionEvent.getSceneY());
                     // System.out.printf("%f, %f\n", vec.getX(), vec.getY());
                     this.setXVel(vec.getX());
