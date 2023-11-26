@@ -38,6 +38,8 @@ public class Ball implements Drawable, Movable {
     private Color colour;
     private Circle shape;
     private Line mouseDragLine;
+    /** cue stick for cue ball */
+    private CueStick cueStick;
     private BallType type;
     private BallPocketStrategy pocketAction;
     private boolean disabled = false;
@@ -192,6 +194,9 @@ public class Ball implements Drawable, Movable {
     public void addToGroup(ObservableList<Node> groupChildren) {
         groupChildren.add(this.shape);
         groupChildren.add(this.mouseDragLine);
+        if (this.cueStick != null) {
+            this.cueStick.addToGroup(groupChildren);
+        }
     }
 
     public void setXVel(double xVel) {
@@ -283,6 +288,7 @@ public class Ball implements Drawable, Movable {
         this.type = type;
         if (this.type == BallType.CUEBALL) {
             this.registerCueBallMouseAction();
+            this.initializeCueStick();
         }
     }
 
@@ -334,6 +340,9 @@ public class Ball implements Drawable, Movable {
                     this.mouseDragLine.setStartY(this.shape.getCenterY());
                     this.mouseDragLine.setEndX(actionEvent.getSceneX());
                     this.mouseDragLine.setEndY(actionEvent.getSceneY());
+
+                    this.cueStick.setXPos(actionEvent.getSceneX());
+                    this.cueStick.setYPos(actionEvent.getSceneY());
                 }
             }
         );
@@ -348,6 +357,10 @@ public class Ball implements Drawable, Movable {
                 }
             }
         );
+    }
+
+    private void initializeCueStick() {
+        this.cueStick = new CueStick();
     }
 
     /**
