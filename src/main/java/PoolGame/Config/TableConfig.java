@@ -9,6 +9,12 @@ public class TableConfig implements Configurable {
     private SizeConfig size;
 
     /**
+     * Add support to config with pockets section.
+     * Is null when there is no pockets section.
+     */
+    private PocketsConfig pockets;
+
+    /**
      * Initialise a config for table using a JSONObject
      * @param obj A JSONObject containing required keys for table
      */
@@ -17,13 +23,24 @@ public class TableConfig implements Configurable {
     }
 
     /**
-     * Initialise a config for velocity using the provided values
+     * Initialise a config for table using the provided values
      * @param colour The colour of the table as String
      * @param friction The friction of the table
      * @param sizeConf A size config instance for the size of the table
      */
     public TableConfig(String colour, double friction, SizeConfig sizeConf) {
         this.init(colour, friction, sizeConf);
+    }
+
+    /**
+     * Initialise a config for table using the provided values
+     * @param colour The colour of the table as String
+     * @param friction The friction of the table
+     * @param sizeConf A size config instance for the size of the table
+     * @param pockets An instance of the pockets config containing all the pockets
+     */
+    public TableConfig(String colour, double friction, SizeConfig sizeConf, PocketsConfig pockets) {
+        this.init(colour, friction, sizeConf, pockets);
     }
 
     private void init(String colour, double friction, SizeConfig sizeConf) {
@@ -39,12 +56,25 @@ public class TableConfig implements Configurable {
         this.size = sizeConf;
     }
 
+    private void init(String colour, double friction, SizeConfig sizeConf, PocketsConfig pockets) {
+        this.init(colour, friction, sizeConf);
+        this.pockets = pockets;
+    }
+
     public Configurable parseJSON(Object obj) {
         JSONObject json = (JSONObject) obj;
         String colour = (String)json.get("colour");
         double friction = (double)json.get("friction");
         SizeConfig szConf = new SizeConfig(json.get("size"));
-        this.init(colour, friction, szConf);
+
+        // Add support for pockets config
+        if (!json.containsKey("pockets")) {
+            this.init(colour, friction, szConf);
+        } else {
+            PocketsConfig pocketsConfig = new PocketsConfig(json.get("pockets"));
+            this.init(colour, friction, szConf, pocketsConfig);
+        }
+
         return this;
     }
 
@@ -70,5 +100,13 @@ public class TableConfig implements Configurable {
      */
     public SizeConfig getSizeConfig() {
         return this.size;
+    }
+
+    /**
+     * Get the pockets config instance.
+     * @return The pockets config instance
+     */
+    public PocketsConfig getPocketsConfig() {
+        return this.pockets;
     }
 }

@@ -136,6 +136,14 @@ public class PoolTable implements Drawable {
     }
 
     /**
+     * Override the default pockets.
+     * @param pockets The new pockets
+     */
+    public void reconfigPockets(List<Pocket> pockets) {
+        this.pockets = pockets;
+    }
+
+    /**
      * Add the table and the balls to the JavaFX group so they can be drawn.
      * @param groupChildren The list of `Node` obtained from the JavaFX Group.
      */

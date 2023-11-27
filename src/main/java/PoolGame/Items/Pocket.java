@@ -1,5 +1,6 @@
 package PoolGame.Items;
 
+import PoolGame.Config.PocketConfig;
 import PoolGame.Drawable;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -12,6 +13,10 @@ public class Pocket implements Drawable {
     
     /** The radius of the pocket */
     public static final double RADIUS = Ball.RADIUS + 5;
+
+    /** The configurable radius of the pocket */
+    private double radius = RADIUS;
+
     /** The colour of the pocket */
     protected Color colour = Color.BLACK;
     /** The JavaFX shape of the pocket */
@@ -23,7 +28,35 @@ public class Pocket implements Drawable {
      * @param posY The y coordinate position of the pocket
      */
     public Pocket(double posX, double posY) {
+        this.init(posX, posY);
+    }
+
+    /**
+     * Initialise the pool table pocket with the provided value
+     * @param posX The x coordinate position of the pocket
+     * @param posY The y coordinate position of the pocket
+     * @param radius The radius of the pocket
+     */
+    public Pocket(double posX, double posY, double radius) {
+        this.init(posX, posY, radius);
+    }
+
+    /**
+     * Build the pocket using a `PocketConfig` instance
+     * @param config The `PocketConfig` instance
+     */
+    public Pocket(PocketConfig config) {
+        this.init(config.getPositionConfig().getX(),
+                config.getPositionConfig().getY(),
+                config.getRadius());
+    }
+
+    private void init(double posX, double posY) {
         this.shape = new Circle(posX, posY, Pocket.RADIUS, this.colour);
+    }
+    private void init(double posX, double posY, double radius) {
+        this.radius = radius;
+        this.shape = new Circle(posX, posY, radius, this.colour);
     }
 
     /**

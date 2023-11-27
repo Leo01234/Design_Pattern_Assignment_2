@@ -5,7 +5,10 @@ import java.util.List;
 
 import PoolGame.Builder.BallBuilderDirector;
 import PoolGame.Config.BallConfig;
+import PoolGame.Config.PocketConfig;
+import PoolGame.Config.PocketsConfig;
 import PoolGame.Items.Ball;
+import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -41,6 +44,19 @@ public class Game {
             }
         }
         this.table.setupBalls(balls);
+
+        // Custom pockets
+        PocketsConfig pocketsConfig = config.getConfig().getTableConfig().getPocketsConfig();
+        if (pocketsConfig != null) {
+            List<PocketConfig> pocketConfigs = pocketsConfig.getPocketConfigs();
+            List<Pocket> pockets = new ArrayList<>();
+            for (PocketConfig pocketConfig : pocketConfigs) {
+                Pocket pocket = new Pocket(pocketConfig);
+                pockets.add(pocket);
+            }
+            this.table.reconfigPockets(pockets);
+        }
+
         this.winText.setVisible(false);
         this.winText.setX(table.getDimX() / 2);
         this.winText.setY(table.getDimY() / 2);

@@ -15,12 +15,15 @@ public class GameConfig implements Configurable {
     public GameConfig(TableConfig table, BallsConfig balls) {
         this.init(table, balls);
     }
-    
+
     private void init(TableConfig table, BallsConfig balls) {
         this.table = table;
         this.balls = balls;
     }
 
+
+    // This method has ABSOLUTELY no usage,
+    // and create BallsConfig this way is WRONG!
     public Configurable parseJSON(Object obj) {
         JSONObject json = (JSONObject) obj;
         this.table = new TableConfig(json.get("Table"));
