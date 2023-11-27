@@ -6,24 +6,20 @@ package PoolGame;
 import java.io.IOException;
 import java.util.List;
 
-import PoolGame.Items.Pocket;
-import PoolGame.Items.PoolTable;
+import PoolGame.Command.*;
 import org.json.simple.parser.ParseException;
 
 import PoolGame.ConfigReader.ConfigKeyMissingException;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /** The JavaFX application */
 public class App extends Application {
 
-    private final double FRAMETIME = 1.0 / 60.0;
+    public static final double FRAMETIME = 1.0 / 60.0;
+
+    private LevelCommand[] levelCommands;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -49,45 +45,24 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Initialize game first, to get table size
-        ConfigReader config = loadConfig(getParameters().getRaw());
-        Game game = new Game(config);
+        ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
 
-        Group root = new Group();
-        // Set size of the scene
-        Scene scene = new Scene(root, game.getWindowDimX(), game.getWindowDimY());
-        
-        stage.setScene(scene);
         stage.setTitle("PoolGame");
-        stage.show();
-
-        Canvas canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
-
-        /*
-         * I can't understand the usage of magic number 4 here.
-         * Maybe we should use the size of scene instead of stage.
-         * It seems that the size of stage includes decorations.
-         * https://stackoverflow.com/questions/40095830/why-is-my-javafx-window-not-the-right-width
-         */
-        // stage.setWidth(game.getWindowDimX());
-        // stage.setHeight(game.getWindowDimY() +
-        //                 Pocket.RADIUS +
-        //                 PoolTable.POCKET_OFFSET +
-        //                 4); // Magic number to get bottom to align
         stage.setResizable(false);
-        // Set the size of stage using the size of scene
-        stage.sizeToScene();
 
-        root.getChildren().add(canvas);
-        // GraphicsContext gc = canvas.getGraphicsContext2D();
-        game.addDrawables(root);
-        
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame frame = new KeyFrame(Duration.seconds(FRAMETIME), (actionEvent) -> game.tick());
 
-        timeline.getKeyFrames().add(frame);
-        timeline.play();
+        this.levelCommands = new LevelCommand[4];
+        this.levelCommands[0] = new DefaultLevelCommand(this.levelCommands,stage,timeline,defaultConfig);
+        this.levelCommands[1] = new EasyLevelCommand(this.levelCommands,stage, timeline);
+        this.levelCommands[2] = new NormalLevelCommand(this.levelCommands,stage, timeline);
+        this.levelCommands[3] = new HardLevelCommand(this.levelCommands,stage, timeline);
+
+        this.levelCommands[0].execute();
+
+        stage.show();
+
     }
 
     /**
