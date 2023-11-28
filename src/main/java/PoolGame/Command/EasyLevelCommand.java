@@ -1,5 +1,6 @@
 package PoolGame.Command;
 
+import PoolGame.App;
 import PoolGame.ConfigReader;
 import javafx.animation.Timeline;
 import javafx.stage.Stage;
@@ -12,17 +13,7 @@ import java.io.IOException;
  * @version 1.0
  */
 public class EasyLevelCommand extends LevelCommand{
-
-    public EasyLevelCommand(LevelCommand[] levelCommands, Stage stage, Timeline timeline) {
-        super(levelCommands,stage, timeline);
-
-        // parse the file:
-        try {
-            this.setConfigReader(new ConfigReader("/config_easy.json", true));
-        } catch (IOException | ParseException | ConfigReader.ConfigKeyMissingException | IllegalArgumentException e) {
-            e.printStackTrace();
-            System.err.printf("ERROR: %s\n", e.getMessage());
-            System.exit(1);
-        }
+    public EasyLevelCommand(App app, ConfigReader configReader) {
+        super(app, configReader);
     }
 }

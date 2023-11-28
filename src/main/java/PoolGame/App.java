@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 import PoolGame.Command.*;
+import javafx.animation.KeyFrame;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.util.Duration;
 import org.json.simple.parser.ParseException;
 
 import PoolGame.ConfigReader.ConfigKeyMissingException;
@@ -20,6 +25,12 @@ public class App extends Application {
     public static final double FRAMETIME = 1.0 / 60.0;
 
     private LevelCommand[] levelCommands;
+
+    /** store the primary stage */
+    private Stage stage;
+
+    /** Share the common timeline object */
+    private Timeline timeline;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -45,23 +56,66 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        // the primary stage
+        this.stage = stage;
+
+        this.levelCommands = new LevelCommand[4];
         ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
+        this.levelCommands[0] = new DefaultLevelCommand(this, defaultConfig);
+        this.levelCommands[1] = new EasyLevelCommand(this, loadConfig(List.of("/config_easy.json")));
+        this.levelCommands[2] = new NormalLevelCommand(this, loadConfig(List.of("/config_normal.json")));
+        this.levelCommands[3] = new HardLevelCommand(this, loadConfig(List.of("/config_hard.json")));
 
         stage.setTitle("PoolGame");
         stage.setResizable(false);
 
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        this.timeline = new Timeline();
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
 
-        this.levelCommands = new LevelCommand[4];
-        this.levelCommands[0] = new DefaultLevelCommand(this.levelCommands,stage,timeline,defaultConfig);
-        this.levelCommands[1] = new EasyLevelCommand(this.levelCommands,stage, timeline);
-        this.levelCommands[2] = new NormalLevelCommand(this.levelCommands,stage, timeline);
-        this.levelCommands[3] = new HardLevelCommand(this.levelCommands,stage, timeline);
 
         this.levelCommands[0].execute();
 
         stage.show();
+
+    }
+
+    public void alterGame(ConfigReader configReader) {
+
+        // Initialize game first, to get table size
+        Game game = new Game(configReader);
+
+        Group root = new Group();
+        // Set size of the scene
+        Scene scene = new Scene(root, game.getWindowDimX(), game.getWindowDimY());
+
+        this.stage.setScene(scene);
+
+        Canvas canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
+
+        /*
+         * I can't understand the usage of magic number 4 here.
+         * Maybe we should use the size of scene instead of stage.
+         * It seems that the size of stage includes decorations.
+         * https://stackoverflow.com/questions/40095830/why-is-my-javafx-window-not-the-right-width
+         */
+        // stage.setWidth(game.getWindowDimX());
+        // stage.setHeight(game.getWindowDimY() +
+        //                 Pocket.RADIUS +
+        //                 PoolTable.POCKET_OFFSET +
+        //                 4); // Magic number to get bottom to align
+
+        // Set the size of stage using the size of scene
+        this.stage.sizeToScene();
+
+        root.getChildren().add(canvas);
+        // GraphicsContext gc = canvas.getGraphicsContext2D();
+        game.addDrawables(root);
+
+        KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
+
+        this.timeline.getKeyFrames().clear();
+        this.timeline.getKeyFrames().add(frame);
+        this.timeline.playFromStart();
 
     }
 

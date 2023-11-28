@@ -1,5 +1,6 @@
 package PoolGame.Command;
 
+import PoolGame.App;
 import PoolGame.ConfigReader;
 import javafx.animation.Timeline;
 import javafx.stage.Stage;
@@ -12,16 +13,7 @@ import java.io.IOException;
  * @version 1.0
  */
 public class NormalLevelCommand extends LevelCommand{
-    public NormalLevelCommand(LevelCommand[] levelCommands, Stage stage, Timeline timeline) {
-        super(levelCommands, stage, timeline);
-
-        // parse the file:
-        try {
-            this.setConfigReader(new ConfigReader("/config_normal.json", true));
-        } catch (IOException | ParseException | ConfigReader.ConfigKeyMissingException | IllegalArgumentException e) {
-            e.printStackTrace();
-            System.err.printf("ERROR: %s\n", e.getMessage());
-            System.exit(1);
-        }
+    public NormalLevelCommand(App app, ConfigReader configReader) {
+        super(app, configReader);
     }
 }
