@@ -1,4 +1,4 @@
-package PoolGame.Items.ControlPanel;
+package PoolGame.ControlPane;
 
 /**
  * @author Leo01234

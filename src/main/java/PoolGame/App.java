@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import PoolGame.Command.*;
+import PoolGame.ControlPane.ControlPane;
 import javafx.animation.KeyFrame;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -42,7 +43,12 @@ public class App extends Application {
 			configPath = "/config.json";
             isResourcesDir = true;
 		}
-		// parse the file:
+        return readConfig(configPath, isResourcesDir);
+    }
+
+    /** Separate from loadConfig to load directly */
+    private ConfigReader readConfig(String configPath, boolean isResourcesDir) {
+        // parse the file:
         ConfigReader config = null;
         try {
             config = new ConfigReader(configPath, isResourcesDir);
@@ -62,9 +68,9 @@ public class App extends Application {
         this.levelCommands = new LevelCommand[4];
         ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
         this.levelCommands[0] = new DefaultLevelCommand(this, defaultConfig);
-        this.levelCommands[1] = new EasyLevelCommand(this, loadConfig(List.of("/config_easy.json")));
-        this.levelCommands[2] = new NormalLevelCommand(this, loadConfig(List.of("/config_normal.json")));
-        this.levelCommands[3] = new HardLevelCommand(this, loadConfig(List.of("/config_hard.json")));
+        this.levelCommands[1] = new EasyLevelCommand(this, readConfig("/config_easy.json", true));
+        this.levelCommands[2] = new NormalLevelCommand(this, readConfig("/config_normal.json", true));
+        this.levelCommands[3] = new HardLevelCommand(this, readConfig("/config_hard.json", true));
 
         stage.setTitle("PoolGame");
         stage.setResizable(false);
@@ -83,10 +89,11 @@ public class App extends Application {
 
         // Initialize game first, to get table size
         Game game = new Game(configReader);
+        ControlPane controlPane = new ControlPane(game.getWindowDimX(), 0);
 
         Group root = new Group();
         // Set size of the scene
-        Scene scene = new Scene(root, game.getWindowDimX(), game.getWindowDimY());
+        Scene scene = new Scene(root, game.getWindowDimX()+200, game.getWindowDimY());
 
         this.stage.setScene(scene);
 
@@ -110,6 +117,11 @@ public class App extends Application {
         root.getChildren().add(canvas);
         // GraphicsContext gc = canvas.getGraphicsContext2D();
         game.addDrawables(root);
+
+        // Set commands
+        controlPane.getLevelChangePane().setAndRegisterLevelCommands(this.levelCommands, scene);
+        // Display control pane
+        controlPane.addToGroup(root.getChildren());
 
         KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
 

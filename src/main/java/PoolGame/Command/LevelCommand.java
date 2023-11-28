@@ -26,25 +26,5 @@ public abstract class LevelCommand implements Command{
         this.app.alterGame(this.configReader);
     }
 
-    private void registerKeyEvent(Scene scene) {
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case DIGIT0:
-                        LevelCommand.this.levelCommands[0].execute();
-                        break;
-                    case DIGIT1:
-                        LevelCommand.this.levelCommands[1].execute();
-                        break;
-                    case DIGIT2:
-                        LevelCommand.this.levelCommands[2].execute();
-                        break;
-                    case DIGIT3:
-                        LevelCommand.this.levelCommands[3].execute();
-                        break;
-                }
-            }
-        });
-    }
+    abstract public String getDisplayName();
 }

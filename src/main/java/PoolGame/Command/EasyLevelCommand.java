@@ -13,6 +13,13 @@ import java.io.IOException;
  * @version 1.0
  */
 public class EasyLevelCommand extends LevelCommand{
+    private String displayName = "Easy level";
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public EasyLevelCommand(App app, ConfigReader configReader) {
         super(app, configReader);
     }

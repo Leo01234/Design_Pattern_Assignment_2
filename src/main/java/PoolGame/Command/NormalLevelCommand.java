@@ -13,6 +13,13 @@ import java.io.IOException;
  * @version 1.0
  */
 public class NormalLevelCommand extends LevelCommand{
+    private String displayName = "Normal level";
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public NormalLevelCommand(App app, ConfigReader configReader) {
         super(app, configReader);
     }

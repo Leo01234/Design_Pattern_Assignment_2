@@ -13,6 +13,13 @@ import java.io.IOException;
  * @version 1.0
  */
 public class HardLevelCommand extends LevelCommand{
+    private String displayName = "Hard level";
+
+    @Override
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public HardLevelCommand(App app, ConfigReader configReader) {
         super(app, configReader);
     }
