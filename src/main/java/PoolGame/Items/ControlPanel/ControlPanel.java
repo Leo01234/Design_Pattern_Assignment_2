@@ -1,4 +1,4 @@
-package PoolGame.Items;
+package PoolGame.Items.ControlPanel;
 
 import PoolGame.Drawable;
 import javafx.collections.ObservableList;
