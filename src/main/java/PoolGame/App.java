@@ -31,7 +31,7 @@ public class App extends Application {
     private Stage stage;
 
     /** Share the common timeline object */
-    private Timeline timeline;
+    private Timeline gameTimeline;
 
     private GameControl gameControl;
 
@@ -83,8 +83,8 @@ public class App extends Application {
         this.gameControl.setCommands(levelCommands);
         this.gameControl.addComponents();
 
-        this.timeline = new Timeline();
-        this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.gameTimeline = new Timeline();
+        this.gameTimeline.setCycleCount(Timeline.INDEFINITE);
 
 
         levelCommands.get(0).execute();
@@ -97,6 +97,7 @@ public class App extends Application {
 
         // Initialize game first, to get table size
         Game game = new Game(configReader);
+        game.setGameControl(this.gameControl);
 
         Group root = new Group();
         // Set size of the scene
@@ -133,9 +134,11 @@ public class App extends Application {
 
         KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
 
-        this.timeline.getKeyFrames().clear();
-        this.timeline.getKeyFrames().add(frame);
-        this.timeline.playFromStart();
+        this.gameTimeline.getKeyFrames().clear();
+        this.gameTimeline.getKeyFrames().add(frame);
+        this.gameTimeline.playFromStart();
+
+        this.gameControl.playFromStart();
 
     }
 

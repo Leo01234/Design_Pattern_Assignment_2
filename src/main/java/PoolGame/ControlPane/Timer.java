@@ -1,5 +1,8 @@
 package PoolGame.ControlPane;
 
+import PoolGame.App;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,26 +16,35 @@ import java.time.Instant;
  */
 public class Timer implements OnPaneDrawable {
     private Label label;
-    private Instant start;
+    private Instant startInstant;
+    private Timeline timeline;
 
     /**
      * Build the timer with the provided values
      */
     public Timer() {
-        this.init();
-    }
-
-    private void init() {
         this.label = new Label();
+
+        this.timeline = new Timeline();
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+        KeyFrame frame = new KeyFrame(javafx.util.Duration.seconds(1.0), (actionEvent) -> this.tick());
+        this.timeline.getKeyFrames().add(frame);
+
     }
 
+    public void playFromStart() {
+        this.label.setText("00:00:00");
+        this.startInstant = Instant.now();
+
+        this.timeline.playFromStart();
+    }
+    public void pause() {
+        this.timeline.pause();
+    }
     public void tick() {
-        if (this.start == null) {
-            this.start = Instant.now();
-        }
         Instant now = Instant.now();
-        Duration timeElapsed = Duration.between(this.start, now);
-        this.label.setText(String.format("%d:%02d:%02d",
+        Duration timeElapsed = Duration.between(this.startInstant, now);
+        this.label.setText(String.format("%02d:%02d:%02d",
                 timeElapsed.toHours(),
                 timeElapsed.toMinutesPart(),
                 timeElapsed.toSecondsPart()));

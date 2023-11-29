@@ -36,6 +36,8 @@ public class LevelButtons implements OnPaneDrawable {
         for (LevelButton levelButton : this.levelButtons) {
             levelButton.setToggleGroup(group);
         }
+
+        this.levelButtons.get(0).setSelected();
     }
 
     public void setAndRegisterCommands(List<Command> commands) {
@@ -45,7 +47,7 @@ public class LevelButtons implements OnPaneDrawable {
 
     private void registerCommands(List<Command> commands) {
         for (int i = 0; i < this.levelButtons.size(); i++) {
-            this.levelButtons.get(i).setCommand(commands.get(i));
+            this.levelButtons.get(i).setAndRegisterCommand(commands.get(i));
         }
 
     }

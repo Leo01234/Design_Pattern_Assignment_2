@@ -27,7 +27,6 @@ public class LevelButton implements OnPaneDrawable  {
 
     private void init(String text) {
         this.radioButton = new RadioButton(text);
-        this.registerButtonEvent();
     }
 
     public void setToggleGroup(ToggleGroup toggleGroup) {
@@ -37,8 +36,9 @@ public class LevelButton implements OnPaneDrawable  {
         this.radioButton.setSelected(true);
     }
 
-    public void setCommand(Command command) {
+    public void setAndRegisterCommand(Command command) {
         this.command = command;
+        this.registerButtonEvent();
     }
 
     private void registerButtonEvent() {

@@ -33,13 +33,19 @@ public class GameControl {
         this.controlPane.addComponents();
     }
 
+    public void setControlPaneDims(double dimX, double dimY) {
+        this.controlPane.setDims(dimX, dimY);
+    }
     public void setCommands(List<Command> commands) {
         this.controlPane.getLevelButtons().setAndRegisterCommands(commands);
     }
     public void registerKeyEvent(Scene scene) {
         this.controlPane.getLevelButtons().registerKeyEvent(scene);
     }
-    public void setControlPaneDims(double dimX, double dimY) {
-        this.controlPane.setDims(dimX, dimY);
+    public void playFromStart() {
+        this.controlPane.getTimer().playFromStart();
+    }
+    public void pause() {
+        this.controlPane.getTimer().pause();
     }
 }

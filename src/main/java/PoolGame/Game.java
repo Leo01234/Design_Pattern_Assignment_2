@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 /** The game class that runs the game */
 public class Game {
     private PoolTable table;
+    private GameControl gameControl;
     private boolean shownWonText = false;
     private final Text winText = new Text(50, 50, "Win and Bye");
 
@@ -95,16 +96,22 @@ public class Game {
         groupChildren.add(this.winText);
     }
 
+    public void setGameControl(GameControl gameControl) {
+        this.gameControl = gameControl;
+    }
+
     /** Reset the game */
     public void reset() {
         this.winText.setVisible(false);
         this.shownWonText = false;
         this.table.reset();
+        this.gameControl.playFromStart();
     }
 
     /** Code to execute every tick. */
     public void tick() {
         if (table.hasWon() && !this.shownWonText) {
+            this.gameControl.pause();
             System.out.println(this.winText.getText());
             this.winText.setVisible(true);
             this.shownWonText = true;

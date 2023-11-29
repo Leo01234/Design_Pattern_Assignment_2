@@ -88,6 +88,10 @@ public class ControlPane implements Drawable {
         return levelButtons;
     }
 
+    public Timer getTimer() {
+        return timer;
+    }
+
     public void setDims(double dimX, double dimY) {
         this.dim[0] = dimX;
         this.dim[1] = dimY;
