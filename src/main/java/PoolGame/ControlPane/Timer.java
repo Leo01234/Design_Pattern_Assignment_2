@@ -12,23 +12,17 @@ import java.time.Instant;
  * @version 1.0
  */
 public class Timer implements OnPaneDrawable {
-    private int[] constraints;
     private Label label;
     private Instant start;
 
     /**
      * Build the timer with the provided values
-     * @param column The column of the timer in the gridPane
-     * @param row The row of the timer in the gridPane
      */
-    public Timer(int column, int row) {
-        this.init(column, row);
+    public Timer() {
+        this.init();
     }
 
-    private void init(int column, int row) {
-        this.constraints = new int[2];
-        this.constraints[0] = column;
-        this.constraints[1] = row;
+    private void init() {
         this.label = new Label();
     }
 

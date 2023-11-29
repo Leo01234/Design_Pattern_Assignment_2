@@ -25,13 +25,14 @@ public class App extends Application {
 
     public static final double FRAMETIME = 1.0 / 60.0;
 
-    private LevelCommand[] levelCommands;
 
     /** store the primary stage */
     private Stage stage;
 
     /** Share the common timeline object */
     private Timeline timeline;
+
+    private GameControl gameControl;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -64,22 +65,28 @@ public class App extends Application {
     public void start(Stage stage) {
         // the primary stage
         this.stage = stage;
+        ControlPane controlPane = new ControlPane();
+        this.gameControl = new GameControl(controlPane);
 
-        this.levelCommands = new LevelCommand[4];
+        LevelCommand[] levelCommands = new LevelCommand[4];
         ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
-        this.levelCommands[0] = new DefaultLevelCommand(this, defaultConfig);
-        this.levelCommands[1] = new EasyLevelCommand(this, readConfig("/config_easy.json", true));
-        this.levelCommands[2] = new NormalLevelCommand(this, readConfig("/config_normal.json", true));
-        this.levelCommands[3] = new HardLevelCommand(this, readConfig("/config_hard.json", true));
+        levelCommands[0] = new DefaultLevelCommand(this, defaultConfig);
+        levelCommands[1] = new EasyLevelCommand(this, readConfig("/config_easy.json", true));
+        levelCommands[2] = new NormalLevelCommand(this, readConfig("/config_normal.json", true));
+        levelCommands[3] = new HardLevelCommand(this, readConfig("/config_hard.json", true));
 
         stage.setTitle("PoolGame");
         stage.setResizable(false);
+
+        // Set commands
+        this.gameControl.setCommands(levelCommands);
+        this.gameControl.addComponents();
 
         this.timeline = new Timeline();
         this.timeline.setCycleCount(Timeline.INDEFINITE);
 
 
-        this.levelCommands[0].execute();
+        levelCommands[0].execute();
 
         stage.show();
 
@@ -89,7 +96,6 @@ public class App extends Application {
 
         // Initialize game first, to get table size
         Game game = new Game(configReader);
-        ControlPane controlPane = new ControlPane(game.getWindowDimX(), 0);
 
         Group root = new Group();
         // Set size of the scene
@@ -114,14 +120,15 @@ public class App extends Application {
         // Set the size of stage using the size of scene
         this.stage.sizeToScene();
 
+
         root.getChildren().add(canvas);
         // GraphicsContext gc = canvas.getGraphicsContext2D();
         game.addDrawables(root);
 
-        // Set commands
-        controlPane.getLevelChangePane().setAndRegisterLevelCommands(this.levelCommands, scene);
         // Display control pane
-        controlPane.addToGroup(root.getChildren());
+        this.gameControl.setControlPaneDims(game.getWindowDimX(), 0);
+        this.gameControl.addDrawables(root);
+        this.gameControl.registerKeyEvent(scene);
 
         KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
 

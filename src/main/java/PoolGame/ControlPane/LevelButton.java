@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -13,28 +14,28 @@ import javafx.scene.layout.GridPane;
  * @version 1.0
  */
 public class LevelButton implements OnPaneDrawable  {
-    private int[] constraints;
     private RadioButton radioButton;
     private LevelCommand levelCommand;
 
     /**
      * Build the timer with the provided values
-     * @param column The column of the timer in the gridPane
-     * @param row The row of the timer in the gridPane
+     * @param text The text on the button
      */
-    public LevelButton(int column, int row, String text) {
-        this.init(column, row, text);
+    public LevelButton(String text) {
+        this.init(text);
     }
 
-    private void init(int column, int row, String text) {
-        this.constraints = new int[2];
-        this.constraints[0] = column;
-        this.constraints[1] = row;
+    private void init(String text) {
         this.radioButton = new RadioButton(text);
-        GridPane.setConstraints(this.radioButton, this.constraints[0], this.constraints[1]);
         this.registerButtonEvent();
     }
 
+    public void setToggleGroup(ToggleGroup toggleGroup) {
+        this.radioButton.setToggleGroup(toggleGroup);
+    }
+    public void setSelected() {
+        this.radioButton.setSelected(true);
+    }
     public void setLevelCommand(LevelCommand levelCommand) {
         this.levelCommand = levelCommand;
     }

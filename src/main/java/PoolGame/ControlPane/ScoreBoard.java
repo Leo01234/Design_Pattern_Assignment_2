@@ -9,23 +9,17 @@ import javafx.scene.control.Label;
  * @version 1.0
  */
 public class ScoreBoard implements OnPaneDrawable {
-    private int[] constraints;
     private Label label;
     private int score = 0;
 
     /**
      * Build the score board with the provided values
-     * @param column The column of the score board in the gridPane
-     * @param row The row of the score board in the gridPane
      */
-    public ScoreBoard(int column, int row) {
-        this.init(column, row);
+    public ScoreBoard() {
+        this.init();
     }
 
-    private void init(int column, int row) {
-        this.constraints = new int[2];
-        this.constraints[0] = column;
-        this.constraints[1] = row;
+    private void init() {
         this.label = new Label(score + "");
     }
 
