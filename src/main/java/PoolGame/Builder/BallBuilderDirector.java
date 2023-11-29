@@ -31,18 +31,18 @@ public class BallBuilderDirector {
 
     /** Register the defaults for the ball builder director. */
     public void registerDefault() {
-        this.register("white", new WhiteBallBuilder(BallType.CUEBALL, new GameReset()));
+        this.register("white", new WhiteBallBuilder(BallType.CUEBALL, new GameReset(), 0));
 
-        this.register("red", new RedBallBuilder(BallType.NORMALBALL, new PocketOnce()));
-        this.register("orange", new OrangeBallBuilder(BallType.NORMALBALL, new PocketOnce()));
-        this.register("yellow", new YellowBallBuilder(BallType.NORMALBALL, new PocketOnce()));
+        this.register("red", new RedBallBuilder(BallType.NORMALBALL, new PocketOnce(), 1));
+        this.register("orange", new OrangeBallBuilder(BallType.NORMALBALL, new PocketOnce(), 2));
+        this.register("yellow", new YellowBallBuilder(BallType.NORMALBALL, new PocketOnce(), 3));
 
-        this.register("blue", new BlueBallBuilder(BallType.NORMALBALL, new PocketTwice()));
-        this.register("green", new GreenBallBuilder(BallType.NORMALBALL, new PocketTwice()));
-        this.register("purple", new PurpleBallBuilder(BallType.NORMALBALL, new PocketTwice()));
+        this.register("blue", new BlueBallBuilder(BallType.NORMALBALL, new PocketTwice(), 4));
+        this.register("green", new GreenBallBuilder(BallType.NORMALBALL, new PocketTwice(), 5));
+        this.register("purple", new PurpleBallBuilder(BallType.NORMALBALL, new PocketTwice(), 6));
 
-        this.register("black", new BlackBallBuilder(BallType.NORMALBALL, new PocketThreeTimes()));
-        this.register("brown", new BrownBallBuilder(BallType.NORMALBALL, new PocketThreeTimes()));
+        this.register("black", new BlackBallBuilder(BallType.NORMALBALL, new PocketThreeTimes(), 7));
+        this.register("brown", new BrownBallBuilder(BallType.NORMALBALL, new PocketThreeTimes(), 8));
     }
 
     /**

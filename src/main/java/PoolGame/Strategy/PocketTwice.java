@@ -19,6 +19,7 @@ public class PocketTwice implements BallPocketStrategy {
             for (Ball ballB: game.getPoolTable().getBalls()) {
                 if (ball.isColliding(ballB)) {
                     ball.disable();
+                    game.addScore(ball.getScore());
                 }
             }
         }

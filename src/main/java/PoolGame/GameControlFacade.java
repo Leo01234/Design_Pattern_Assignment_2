@@ -1,6 +1,5 @@
 package PoolGame;
 
-import PoolGame.Command.ChangeLevelCommand;
 import PoolGame.Command.Command;
 import PoolGame.ControlPane.ControlPane;
 import javafx.collections.ObservableList;
@@ -15,10 +14,10 @@ import java.util.List;
  * @author Leo01234
  * @version 1.0
  */
-public class GameControl {
+public class GameControlFacade {
     private ControlPane controlPane;
 
-    public GameControl(ControlPane controlPane) {
+    public GameControlFacade(ControlPane controlPane) {
         this.controlPane = controlPane;
     }
 
@@ -32,7 +31,6 @@ public class GameControl {
     public void addComponents() {
         this.controlPane.addComponents();
     }
-
     public void setControlPaneDims(double dimX, double dimY) {
         this.controlPane.setDims(dimX, dimY);
     }
@@ -47,5 +45,11 @@ public class GameControl {
     }
     public void pause() {
         this.controlPane.getTimer().pause();
+    }
+    public void reset() {
+        this.controlPane.getScoreBoard().reset();
+    }
+    public void addScore(int score) {
+        this.controlPane.getScoreBoard().addScore(score);
     }
 }

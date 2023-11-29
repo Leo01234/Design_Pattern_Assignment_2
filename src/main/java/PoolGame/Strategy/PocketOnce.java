@@ -7,5 +7,6 @@ import PoolGame.Items.Ball;
 public class PocketOnce implements BallPocketStrategy {
     public void fallIntoPocket(Game game, Ball ball) {
         ball.disable();
+        game.addScore(ball.getScore());
     }
 }

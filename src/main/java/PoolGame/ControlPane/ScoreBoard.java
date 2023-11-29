@@ -16,13 +16,18 @@ public class ScoreBoard implements OnPaneDrawable {
      * Build the score board with the provided values
      */
     public ScoreBoard() {
-        this.init();
+        this.label = new Label(this.score + "");
     }
 
-    private void init() {
-        this.label = new Label(score + "");
+    public void reset() {
+        this.score = 0;
+        this.label.setText(this.score + "");
     }
 
+    public void addScore(int score) {
+        this.score += score;
+        this.label.setText(this.score + "");
+    }
     /**
      * Add the object to the JavaFX pane so they can be drawn.
      *

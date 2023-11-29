@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
 /** The game class that runs the game */
 public class Game {
     private PoolTable table;
-    private GameControl gameControl;
+    private GameControlFacade gameControlFacade;
     private boolean shownWonText = false;
     private final Text winText = new Text(50, 50, "Win and Bye");
 
@@ -96,8 +96,8 @@ public class Game {
         groupChildren.add(this.winText);
     }
 
-    public void setGameControl(GameControl gameControl) {
-        this.gameControl = gameControl;
+    public void setGameControl(GameControlFacade gameControlFacade) {
+        this.gameControlFacade = gameControlFacade;
     }
 
     /** Reset the game */
@@ -105,13 +105,20 @@ public class Game {
         this.winText.setVisible(false);
         this.shownWonText = false;
         this.table.reset();
-        this.gameControl.playFromStart();
+
+        this.gameControlFacade.playFromStart();
+        this.gameControlFacade.reset();
     }
 
+    public void addScore(int score) {
+        this.gameControlFacade.addScore(score);
+    }
     /** Code to execute every tick. */
     public void tick() {
         if (table.hasWon() && !this.shownWonText) {
-            this.gameControl.pause();
+
+            this.gameControlFacade.pause();
+
             System.out.println(this.winText.getText());
             this.winText.setVisible(true);
             this.shownWonText = true;

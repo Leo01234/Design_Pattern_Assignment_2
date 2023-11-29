@@ -42,6 +42,7 @@ public class Ball implements Drawable, Movable {
     private CueStick cueStick;
     private BallType type;
     private BallPocketStrategy pocketAction;
+    private int score;
     private boolean disabled = false;
     private int fallCounter = 0;
 
@@ -57,7 +58,7 @@ public class Ball implements Drawable, Movable {
      * @param pocketAction The action to be carried out when a ball fall into a pocket
      * @throws IllegalArgumentException One of the provided value is invalid
      */
-    public Ball(String colour, double xPos, double yPos, double xVel, double yVel, double mass, BallType type, BallPocketStrategy pocketAction) throws IllegalArgumentException {
+    public Ball(String colour, double xPos, double yPos, double xVel, double yVel, double mass, BallType type, BallPocketStrategy pocketAction, int score) throws IllegalArgumentException {
         this.shape = new Circle(this.originalPos[0], this.originalPos[1], RADIUS);
         this.mouseDragLine = new Line();
         this.mouseDragLine.setVisible(false);
@@ -71,6 +72,7 @@ public class Ball implements Drawable, Movable {
         this.setMass(mass);
         this.setBallType(type);
         this.setPocketAction(pocketAction);
+        this.score = score;
     }
 
     /** 
@@ -163,6 +165,9 @@ public class Ball implements Drawable, Movable {
         return this.pocketAction;
     }
 
+    public int getScore() {
+        return this.score;
+    }
     /**
      * Get the number of times a ball has fell into a pocket.
      * @return The number of times a ball has fell into a pocket
@@ -290,6 +295,10 @@ public class Ball implements Drawable, Movable {
             this.registerCueBallMouseAction();
             this.initializeCueStick();
         }
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /** Increment the counter that keeps track of the number of times a ball

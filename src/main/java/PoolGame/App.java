@@ -33,7 +33,7 @@ public class App extends Application {
     /** Share the common timeline object */
     private Timeline gameTimeline;
 
-    private GameControl gameControl;
+    private GameControlFacade gameControlFacade;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -67,7 +67,7 @@ public class App extends Application {
         // the primary stage
         this.stage = stage;
         ControlPane controlPane = new ControlPane();
-        this.gameControl = new GameControl(controlPane);
+        this.gameControlFacade = new GameControlFacade(controlPane);
 
         List<Command> levelCommands = new ArrayList<>();
         ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
@@ -80,8 +80,8 @@ public class App extends Application {
         stage.setResizable(false);
 
         // Set commands
-        this.gameControl.setCommands(levelCommands);
-        this.gameControl.addComponents();
+        this.gameControlFacade.setCommands(levelCommands);
+        this.gameControlFacade.addComponents();
 
         this.gameTimeline = new Timeline();
         this.gameTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -97,7 +97,7 @@ public class App extends Application {
 
         // Initialize game first, to get table size
         Game game = new Game(configReader);
-        game.setGameControl(this.gameControl);
+        game.setGameControl(this.gameControlFacade);
 
         Group root = new Group();
         // Set size of the scene
@@ -128,9 +128,9 @@ public class App extends Application {
         game.addDrawables(root);
 
         // Display control pane
-        this.gameControl.setControlPaneDims(game.getWindowDimX(), 0);
-        this.gameControl.addDrawables(root);
-        this.gameControl.registerKeyEvent(scene);
+        this.gameControlFacade.setControlPaneDims(game.getWindowDimX(), 0);
+        this.gameControlFacade.addDrawables(root);
+        this.gameControlFacade.registerKeyEvent(scene);
 
         KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
 
@@ -138,7 +138,10 @@ public class App extends Application {
         this.gameTimeline.getKeyFrames().add(frame);
         this.gameTimeline.playFromStart();
 
-        this.gameControl.playFromStart();
+        // Timer
+        this.gameControlFacade.playFromStart();
+        // Scoreboard
+        this.gameControlFacade.reset();
 
     }
 

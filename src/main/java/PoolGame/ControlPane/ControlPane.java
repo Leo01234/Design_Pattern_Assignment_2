@@ -92,6 +92,10 @@ public class ControlPane implements Drawable {
         return timer;
     }
 
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
+
     public void setDims(double dimX, double dimY) {
         this.dim[0] = dimX;
         this.dim[1] = dimY;

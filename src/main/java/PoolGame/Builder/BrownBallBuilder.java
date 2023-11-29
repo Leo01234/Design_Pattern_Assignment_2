@@ -10,6 +10,7 @@ public class BrownBallBuilder implements BallBuilder {
     private Ball ball;
     private BallType ballType = null;
     private BallPocketStrategy action = null;
+    private int score;
 
     /** Initialise the builder and start a new build */
     public BrownBallBuilder() {
@@ -21,9 +22,10 @@ public class BrownBallBuilder implements BallBuilder {
      * @param type The ball type the builder will build
      * @param action The action that the ball have when it falls into a pocket
      */
-    public BrownBallBuilder(BallType type, BallPocketStrategy action) {
+    public BrownBallBuilder(BallType type, BallPocketStrategy action, int score) {
         this.ballType = type;
         this.action = action;
+        this.score = score;
         this.reset();
     }
     
@@ -36,6 +38,7 @@ public class BrownBallBuilder implements BallBuilder {
         if (this.action != null) {
             this.ball.setPocketAction(this.action);
         }
+        this.ball.setScore(this.score);
     }
 
     public void setXPos(double xPos) {
