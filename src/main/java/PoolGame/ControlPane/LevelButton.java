@@ -1,13 +1,13 @@
 package PoolGame.ControlPane;
 
-import PoolGame.Command.LevelCommand;
+import PoolGame.Command.ChangeLevelCommand;
+import PoolGame.Command.Command;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.GridPane;
 
 /**
  * @author Leo01234
@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
  */
 public class LevelButton implements OnPaneDrawable  {
     private RadioButton radioButton;
-    private LevelCommand levelCommand;
+    private Command command;
 
     /**
      * Build the timer with the provided values
@@ -36,15 +36,17 @@ public class LevelButton implements OnPaneDrawable  {
     public void setSelected() {
         this.radioButton.setSelected(true);
     }
-    public void setLevelCommand(LevelCommand levelCommand) {
-        this.levelCommand = levelCommand;
+
+    public void setCommand(Command command) {
+        this.command = command;
     }
+
     private void registerButtonEvent() {
         this.radioButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
-                    LevelButton.this.levelCommand.execute();
+                    LevelButton.this.command.execute();
                 }
             }
         });

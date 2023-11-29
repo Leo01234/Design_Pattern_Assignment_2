@@ -4,6 +4,7 @@
 package PoolGame;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import PoolGame.Command.*;
@@ -68,12 +69,12 @@ public class App extends Application {
         ControlPane controlPane = new ControlPane();
         this.gameControl = new GameControl(controlPane);
 
-        LevelCommand[] levelCommands = new LevelCommand[4];
+        List<Command> levelCommands = new ArrayList<>();
         ConfigReader defaultConfig = loadConfig(getParameters().getRaw());
-        levelCommands[0] = new DefaultLevelCommand(this, defaultConfig);
-        levelCommands[1] = new EasyLevelCommand(this, readConfig("/config_easy.json", true));
-        levelCommands[2] = new NormalLevelCommand(this, readConfig("/config_normal.json", true));
-        levelCommands[3] = new HardLevelCommand(this, readConfig("/config_hard.json", true));
+        levelCommands.add(new ChangeLevelCommand(this, defaultConfig));
+        levelCommands.add(new ChangeLevelCommand(this, readConfig("/config_easy.json", true)));
+        levelCommands.add(new ChangeLevelCommand(this, readConfig("/config_normal.json", true)));
+        levelCommands.add(new ChangeLevelCommand(this, readConfig("/config_hard.json", true)));
 
         stage.setTitle("PoolGame");
         stage.setResizable(false);
@@ -86,7 +87,7 @@ public class App extends Application {
         this.timeline.setCycleCount(Timeline.INDEFINITE);
 
 
-        levelCommands[0].execute();
+        levelCommands.get(0).execute();
 
         stage.show();
 

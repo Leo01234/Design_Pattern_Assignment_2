@@ -1,15 +1,13 @@
 package PoolGame.ControlPane;
 
-import PoolGame.Command.LevelCommand;
+import PoolGame.Command.ChangeLevelCommand;
+import PoolGame.Command.Command;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,32 +18,34 @@ import java.util.List;
  */
 public class LevelButtons implements OnPaneDrawable {
     private List<LevelButton> levelButtons;
-    private LevelCommand[] levelCommands;
+    private List<Command> commands;
 
     /**
      * Build the level buttons with the provided values
      */
     public LevelButtons() {
-        this.init();
-    }
-
-    private void init() {
         this.levelButtons = new ArrayList<>();
-    }
 
-    public void setAndRegisterLevelCommands(LevelCommand[] levelCommands) {
-        this.levelCommands = levelCommands;
-        this.initLevelButtons(levelCommands);
-    }
-
-    private void initLevelButtons(LevelCommand[] levelCommands) {
         ToggleGroup group = new ToggleGroup();
-        for (int i = 0; i < levelCommands.length; i++) {
-            LevelCommand levelCommand = levelCommands[i];
-            LevelButton levelButton = new LevelButton(levelCommand.getDisplayName());
+
+        this.levelButtons.add(new LevelButton("0: Default level"));
+        this.levelButtons.add(new LevelButton("1: Easy level"));
+        this.levelButtons.add(new LevelButton("2: Normal level"));
+        this.levelButtons.add(new LevelButton("3: Hard level"));
+
+        for (LevelButton levelButton : this.levelButtons) {
             levelButton.setToggleGroup(group);
-            levelButton.setLevelCommand(levelCommand);
-            this.levelButtons.add(levelButton);
+        }
+    }
+
+    public void setAndRegisterCommands(List<Command> commands) {
+        this.commands = commands;
+        this.registerCommands(commands);
+    }
+
+    private void registerCommands(List<Command> commands) {
+        for (int i = 0; i < this.levelButtons.size(); i++) {
+            this.levelButtons.get(i).setCommand(commands.get(i));
         }
 
     }
@@ -56,16 +56,16 @@ public class LevelButtons implements OnPaneDrawable {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case DIGIT0:
-                        LevelButtons.this.levelCommands[0].execute();
+                        LevelButtons.this.levelButtons.get(0).setSelected();
                         break;
                     case DIGIT1:
-                        LevelButtons.this.levelCommands[1].execute();
+                        LevelButtons.this.levelButtons.get(1).setSelected();
                         break;
                     case DIGIT2:
-                        LevelButtons.this.levelCommands[2].execute();
+                        LevelButtons.this.levelButtons.get(2).setSelected();
                         break;
                     case DIGIT3:
-                        LevelButtons.this.levelCommands[3].execute();
+                        LevelButtons.this.levelButtons.get(3).setSelected();
                         break;
                 }
             }

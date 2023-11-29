@@ -1,11 +1,14 @@
 package PoolGame;
 
-import PoolGame.Command.LevelCommand;
+import PoolGame.Command.ChangeLevelCommand;
+import PoolGame.Command.Command;
 import PoolGame.ControlPane.ControlPane;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+
+import java.util.List;
 
 /**
  * Game control utils
@@ -30,8 +33,8 @@ public class GameControl {
         this.controlPane.addComponents();
     }
 
-    public void setCommands(LevelCommand[] levelCommands) {
-        this.controlPane.getLevelButtons().setAndRegisterLevelCommands(levelCommands);
+    public void setCommands(List<Command> commands) {
+        this.controlPane.getLevelButtons().setAndRegisterCommands(commands);
     }
     public void registerKeyEvent(Scene scene) {
         this.controlPane.getLevelButtons().registerKeyEvent(scene);
