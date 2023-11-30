@@ -36,6 +36,10 @@ public class GameControlFacade {
         this.controlPane.setDims(dimX, dimY);
     }
 
+    public void setControlPaneHeight(double height) {
+        this.controlPane.setHeight(height);
+    }
+
     // LevelButtons
     public void setCommands(List<Command> commands) {
         this.controlPane.getLevelButtons().setAndRegisterCommands(commands);

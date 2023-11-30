@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 public class ControlPane implements Drawable {
     private double[] dim;
     private static final Color COLOR = Color.RED;
+    public static final double CONTROL_PANE_WIDTH = 200;
     private VBox vBox;
 
     private LevelButtons levelButtons;
@@ -30,6 +31,7 @@ public class ControlPane implements Drawable {
                 new CornerRadii(0),
                 new Insets(0)
         )));
+        this.vBox.setPrefWidth(CONTROL_PANE_WIDTH);
 
         this.levelButtons = new LevelButtons();
         this.timer = new Timer();
@@ -76,6 +78,9 @@ public class ControlPane implements Drawable {
         this.vBox.setLayoutY(dimY);
     }
 
+    public void setHeight(double height) {
+        this.vBox.setPrefHeight(height);
+    }
     public Node getNode() {
         return this.vBox;
     }

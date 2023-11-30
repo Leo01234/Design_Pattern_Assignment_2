@@ -101,7 +101,7 @@ public class App extends Application {
 
         Group root = new Group();
         // Set size of the scene
-        Scene scene = new Scene(root, game.getWindowDimX()+200, game.getWindowDimY());
+        Scene scene = new Scene(root, game.getWindowDimX() + ControlPane.CONTROL_PANE_WIDTH, game.getWindowDimY());
 
         this.stage.setScene(scene);
 
@@ -129,6 +129,7 @@ public class App extends Application {
 
         // Display control pane
         this.gameControlFacade.setControlPaneDims(game.getWindowDimX(), 0);
+        this.gameControlFacade.setControlPaneHeight(game.getWindowDimY());
         this.gameControlFacade.addDrawables(root);
         this.gameControlFacade.registerKeyEvent(scene);
 
