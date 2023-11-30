@@ -3,6 +3,7 @@ package PoolGame.ControlPane;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
 /**
  * @author Leo01234
@@ -16,24 +17,29 @@ public class ScoreBoard implements OnPaneDrawable {
      * Build the score board with the provided values
      */
     public ScoreBoard() {
-        this.label = new Label(this.score + "");
+        this.label = new Label();
+        this.label.setFont(Font.font(30.0));
+        this.display();
     }
 
     public void reset() {
         this.score = 0;
-        this.label.setText(this.score + "");
+        this.display();
     }
 
     public void addScore(int score) {
         this.score += score;
-        this.label.setText(this.score + "");
+        this.display();
     }
 
     public void setScore(int score) {
         this.score = score;
-        this.label.setText(this.score + "");
+        this.display();
     }
 
+    private void display() {
+        this.label.setText("Score: " + this.score);
+    }
     public int getScore() {
         return score;
     }

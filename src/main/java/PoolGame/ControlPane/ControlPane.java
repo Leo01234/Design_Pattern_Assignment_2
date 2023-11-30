@@ -3,6 +3,7 @@ package PoolGame.ControlPane;
 import PoolGame.Drawable;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class ControlPane implements Drawable {
     private double[] dim;
-    private static final Color COLOR = Color.RED;
+    private static final Color COLOR = Color.ANTIQUEWHITE;
     public static final double CONTROL_PANE_WIDTH = 200;
     private VBox vBox;
 
@@ -32,6 +33,7 @@ public class ControlPane implements Drawable {
                 new Insets(0)
         )));
         this.vBox.setPrefWidth(CONTROL_PANE_WIDTH);
+        this.vBox.setSpacing(5.0);
 
         this.levelButtons = new LevelButtons();
         this.timer = new Timer();

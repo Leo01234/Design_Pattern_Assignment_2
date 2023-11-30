@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
 import java.time.Duration;
 
@@ -24,6 +25,7 @@ public class Timer implements OnPaneDrawable {
      */
     public Timer() {
         this.label = new Label();
+        this.label.setFont(Font.font(20.0));
 
         this.duration = Duration.ZERO;
 
