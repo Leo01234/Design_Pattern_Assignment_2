@@ -8,15 +8,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 import java.time.Duration;
-import java.time.Instant;
 
 /**
  * @author Leo01234
  * @version 1.0
  */
 public class Timer implements OnPaneDrawable {
+    private static final Duration ONESECOND = Duration.ofSeconds(1);
     private Label label;
-    private Instant startInstant;
+    private Duration duration;
     private Timeline timeline;
 
     /**
@@ -24,6 +24,8 @@ public class Timer implements OnPaneDrawable {
      */
     public Timer() {
         this.label = new Label();
+
+        this.duration = Duration.ZERO;
 
         this.timeline = new Timeline();
         this.timeline.setCycleCount(Timeline.INDEFINITE);
@@ -34,20 +36,32 @@ public class Timer implements OnPaneDrawable {
 
     public void playFromStart() {
         this.label.setText("00:00:00");
-        this.startInstant = Instant.now();
+        this.duration = Duration.ZERO;
 
         this.timeline.playFromStart();
     }
     public void pause() {
         this.timeline.pause();
     }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+        this.display();
+    }
+
     public void tick() {
-        Instant now = Instant.now();
-        Duration timeElapsed = Duration.between(this.startInstant, now);
+        this.duration = this.duration.plus(ONESECOND);
+        this.display();
+    }
+    private void display() {
         this.label.setText(String.format("%02d:%02d:%02d",
-                timeElapsed.toHours(),
-                timeElapsed.toMinutesPart(),
-                timeElapsed.toSecondsPart()));
+                this.duration.toHours(),
+                this.duration.toMinutesPart(),
+                this.duration.toSecondsPart()));
     }
 
     /**

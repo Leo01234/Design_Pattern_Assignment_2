@@ -28,6 +28,16 @@ public class ScoreBoard implements OnPaneDrawable {
         this.score += score;
         this.label.setText(this.score + "");
     }
+
+    public void setScore(int score) {
+        this.score = score;
+        this.label.setText(this.score + "");
+    }
+
+    public int getScore() {
+        return score;
+    }
+
     /**
      * Add the object to the JavaFX pane so they can be drawn.
      *

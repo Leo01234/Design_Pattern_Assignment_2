@@ -1,6 +1,9 @@
 package PoolGame;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import PoolGame.Builder.BallBuilderDirector;
@@ -19,6 +22,8 @@ import javafx.scene.text.Text;
 public class Game {
     private PoolTable table;
     private GameControlFacade gameControlFacade;
+    private HistoryCaretaker historyCaretaker;
+    private List<Boolean> cueBallHasStopped;
     private boolean shownWonText = false;
     private final Text winText = new Text(50, 50, "Win and Bye");
 
@@ -56,6 +61,13 @@ public class Game {
                 pockets.add(pocket);
             }
             this.table.reconfigPockets(pockets);
+        }
+
+        this.cueBallHasStopped = new ArrayList<>();
+        for (Ball ball : balls) {
+            if (ball.getBallType() == Ball.BallType.CUEBALL) {
+                this.cueBallHasStopped.add(ball.hasStopped());
+            }
         }
 
         this.winText.setVisible(false);
@@ -100,6 +112,10 @@ public class Game {
         this.gameControlFacade = gameControlFacade;
     }
 
+    public void setHistoryCaretaker(HistoryCaretaker historyCaretaker) {
+        this.historyCaretaker = historyCaretaker;
+    }
+
     /** Reset the game */
     public void reset() {
         this.winText.setVisible(false);
@@ -128,6 +144,97 @@ public class Game {
         this.table.applyFrictionToBalls();
         for (Ball ball : this.table.getBalls()) {
             ball.move();
+        }
+
+        int i = 0;
+        for (Ball ball : this.table.getBalls()) {
+            if (ball.getBallType() == Ball.BallType.CUEBALL) {
+                if (!this.cueBallHasStopped.get(i) && ball.hasStopped()) {
+                    this.historyCaretaker.saveHistory();
+                }
+                this.cueBallHasStopped.set(i, ball.hasStopped());
+                i++;
+            }
+        }
+    }
+
+    public class Memento {
+        private static class BallState {
+            private double xPos;
+            private double yPos;
+            private double xVel;
+            private double yVel;
+
+            private boolean disabled;
+            private int fallCounter;
+
+            private BallState(double xPos, double yPos, double xVel, double yVel, boolean disabled, int fallCounter) {
+                this.xPos = xPos;
+                this.yPos = yPos;
+                this.xVel = xVel;
+                this.yVel = yVel;
+                this.disabled = disabled;
+                this.fallCounter = fallCounter;
+            }
+        }
+        private Duration duration;
+        private int score;
+        private List<BallState> ballStates;
+
+        private Memento(Duration duration, int score, List<BallState> ballStates) {
+            this.duration = duration;
+            this.score = score;
+            this.ballStates = ballStates;
+        }
+
+        public Duration getDuration() {
+            return duration;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public List<BallState> getBallStates() {
+            return ballStates;
+        }
+    }
+    public Memento save() {
+        List<Memento.BallState> ballStates = new ArrayList<>();
+        for (Ball ball : this.getPoolTable().getBalls()) {
+            ballStates.add(new Memento.BallState(
+                    ball.getXPos(),
+                    ball.getYPos(),
+                    ball.getXVel(),
+                    ball.getYVel(),
+                    ball.isDisabled(),
+                    ball.getFallCounter()
+            ));
+        }
+        return new Memento(this.gameControlFacade.getDuration(),
+                this.gameControlFacade.getScore(),
+                ballStates);
+    }
+    public void restore(Memento memento) {
+        this.gameControlFacade.setDuration(memento.getDuration());
+        this.gameControlFacade.setScore(memento.getScore());
+
+        Iterator<Ball> ballIterator = this.getPoolTable().getBalls().iterator();
+        Iterator<Memento.BallState> ballStateIterator = memento.getBallStates().iterator();
+        while (ballIterator.hasNext() && ballStateIterator.hasNext()) {
+            Ball ball = ballIterator.next();
+            Memento.BallState ballState = ballStateIterator.next();
+
+            ball.setXPos(ballState.xPos);
+            ball.setYPos(ballState.yPos);
+            ball.setXVel(ballState.xVel);
+            ball.setYVel(ballState.yVel);
+            if (ballState.disabled) {
+                ball.disable();
+            } else {
+                ball.enable();
+            }
+            ball.setFallCounter(ballState.fallCounter);
         }
     }
 }

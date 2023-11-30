@@ -132,6 +132,14 @@ public class App extends Application {
         this.gameControlFacade.addDrawables(root);
         this.gameControlFacade.registerKeyEvent(scene);
 
+        // Scoreboard
+        this.gameControlFacade.reset();
+        // UndoControl
+        HistoryCaretaker historyCaretaker = new HistoryCaretaker(game);
+        game.setHistoryCaretaker(historyCaretaker);
+        this.gameControlFacade.setUndoCommand(new UndoCommand(historyCaretaker));
+        historyCaretaker.saveHistory();
+
         KeyFrame frame = new KeyFrame(Duration.seconds(App.FRAMETIME), (actionEvent) -> game.tick());
 
         this.gameTimeline.getKeyFrames().clear();
@@ -140,8 +148,6 @@ public class App extends Application {
 
         // Timer
         this.gameControlFacade.playFromStart();
-        // Scoreboard
-        this.gameControlFacade.reset();
 
     }
 

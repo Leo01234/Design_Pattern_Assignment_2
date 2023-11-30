@@ -23,9 +23,6 @@ public class ControlPane implements Drawable {
 
     /** Set dims later */
     public ControlPane() {
-        this.init();
-    }
-    private void init() {
         this.dim = new double[2];
         this.vBox = new VBox();
         this.vBox.setBackground(new Background(new BackgroundFill(
@@ -37,35 +34,7 @@ public class ControlPane implements Drawable {
         this.levelButtons = new LevelButtons();
         this.timer = new Timer();
         this.scoreBoard = new ScoreBoard();
-//        this.undoControl = new UndoControl();
-    }
-
-    /**
-     * Build the control panel with the provided values
-     * @param dimX The dimension of the panel in the x-axis
-     * @param dimY The dimension of the panel in the y-axis
-     */
-    public ControlPane(double dimX, double dimY) {
-        this.init(dimX, dimY);
-    }
-
-    private void init(double dimX, double dimY) {
-        this.dim = new double[2];
-        this.dim[0] = dimX;
-        this.dim[1] = dimY;
-        this.vBox = new VBox();
-        this.vBox.setLayoutX(dimX);
-        this.vBox.setLayoutY(dimY);
-        this.vBox.setBackground(new Background(new BackgroundFill(
-                COLOR,
-                new CornerRadii(0),
-                new Insets(0)
-        )));
-
-        this.levelButtons = new LevelButtons();
-        this.timer = new Timer();
-        this.scoreBoard = new ScoreBoard();
-//        this.undoControl = new UndoControl();
+        this.undoControl = new UndoControl();
     }
 
     /**
@@ -96,6 +65,10 @@ public class ControlPane implements Drawable {
         return scoreBoard;
     }
 
+    public UndoControl getUndoControl() {
+        return undoControl;
+    }
+
     public void setDims(double dimX, double dimY) {
         this.dim[0] = dimX;
         this.dim[1] = dimY;
@@ -123,6 +96,6 @@ public class ControlPane implements Drawable {
         this.levelButtons.addToPane(thisPaneChildren);
         this.timer.addToPane(thisPaneChildren);
         this.scoreBoard.addToPane(thisPaneChildren);
-
+        this.undoControl.addToPane(thisPaneChildren);
     }
 }

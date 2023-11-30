@@ -308,10 +308,18 @@ public class Ball implements Drawable, Movable {
         this.fallCounter++;
     }
 
+    public void setFallCounter(int fallCounter) {
+        this.fallCounter = fallCounter;
+    }
+
     /** Disable the ball from carrying out any operations and hide the ball */
     public void disable() {
         this.shape.setVisible(false);
         this.disabled = true;
+    }
+    public void enable() {
+        this.shape.setVisible(true);
+        this.disabled = false;
     }
 
     /** Reset a ball to its initial position and make it visible and interactable */

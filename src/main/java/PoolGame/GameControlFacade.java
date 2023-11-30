@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -34,22 +35,47 @@ public class GameControlFacade {
     public void setControlPaneDims(double dimX, double dimY) {
         this.controlPane.setDims(dimX, dimY);
     }
+
+    // LevelButtons
     public void setCommands(List<Command> commands) {
         this.controlPane.getLevelButtons().setAndRegisterCommands(commands);
     }
     public void registerKeyEvent(Scene scene) {
         this.controlPane.getLevelButtons().registerKeyEvent(scene);
     }
+
+    // Timer
     public void playFromStart() {
         this.controlPane.getTimer().playFromStart();
     }
     public void pause() {
         this.controlPane.getTimer().pause();
     }
+
+    public Duration getDuration() {
+        return this.controlPane.getTimer().getDuration();
+    }
+
+    public void setDuration(Duration duration) {
+        this.controlPane.getTimer().setDuration(duration);
+    }
+
+    // ScoreBoard
     public void reset() {
         this.controlPane.getScoreBoard().reset();
     }
     public void addScore(int score) {
         this.controlPane.getScoreBoard().addScore(score);
+    }
+    public void setScore(int score) {
+        this.controlPane.getScoreBoard().setScore(score);
+    }
+    public int getScore() {
+        return this.controlPane.getScoreBoard().getScore();
+    }
+
+    // UndoControl
+    public void setUndoCommand(Command command) {
+        this.controlPane.getUndoControl().setAndRegisterCommand(command);
     }
 }
