@@ -16,8 +16,10 @@ public class HistoryCaretaker {
         this.history.push(this.game.save());
     }
     public void undo() {
-        if (!this.history.empty()) {
+        if (this.history.size() > 1) {
             this.game.restore(this.history.pop());
+        } else if (this.history.size() == 1) {
+            this.game.restore(this.history.peek());
         }
     }
 }
