@@ -14,12 +14,12 @@ public class PocketTwice implements BallPocketStrategy {
         ball.incrementFallCounter();
         if (ball.getFallCounter() >= FALL_COUNTER_THRESHOLD) {
             ball.disable();
+            game.addScore(ball.getScore());
         } else {
             ball.resetPosition();
             for (Ball ballB: game.getPoolTable().getBalls()) {
                 if (ball.isColliding(ballB)) {
                     ball.disable();
-                    game.addScore(ball.getScore());
                 }
             }
         }
